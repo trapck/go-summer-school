@@ -1,6 +1,6 @@
 # go-summer-school
 
-v0.1.1
+v0.1.1-main
 
 fix 1
 
