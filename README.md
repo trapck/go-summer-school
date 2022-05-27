@@ -1,6 +1,6 @@
 # go-summer-school
 
-v0.2.1
+v0.3.0
 
 new feature1
 
@@ -13,3 +13,7 @@ fix 1
 fix 2
 
 fix 3
+
+feature 4
+
+feature 5
