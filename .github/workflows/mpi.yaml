@@ -23,7 +23,7 @@ jobs:
           echo "hello"
           echo "${{ github.ref }}"
           echo ${GITHUB_REF#refs/heads/}
-          if [[ ${{ github.ref }} == refs/heads/release/* ]]; then
+          if [[ ${{ github.ref }} == refs/heads/release/ ]]; then
             echo "release"
           else
             echo "master"
