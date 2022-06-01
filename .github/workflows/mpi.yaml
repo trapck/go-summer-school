@@ -21,3 +21,4 @@ jobs:
         shell: bash
         run: |
           echo "hello"
+          echo "${{ github.ref }}"
