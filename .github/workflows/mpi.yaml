@@ -1,0 +1,22 @@
+name: "mpi"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  prepare:
+    if: "!contains(github.event.head_commit.message, 'Auto-release')"
+    name: Preparing build context
+    strategy:
+      matrix:
+        go-version: [ 1.18.x ]
+        platform: [ ubuntu-latest ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Application Version
+        id: semrel
+        shell: bash
+        run: |
+          echo "hello"
