@@ -19,3 +19,5 @@ feature 4
 feature 5
 
 release
+
+feature 6
