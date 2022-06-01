@@ -17,3 +17,5 @@ fix 3
 feature 4
 
 feature 5
+
+release
