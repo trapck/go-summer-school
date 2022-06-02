@@ -28,10 +28,10 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           echo "${BRANCH_NAME}"
-          BUILD_TYPE="develop"
-          if [[ ${BRANCH_NAME} == release/** ]]; then
-            echo BUILD_TYPE="release"
-          if [[ ${BRANCH_NAME} == hotpatch/** ]]; then
-            echo BUILD_TYPE="patch"
-          fi
-          echo "${BUILD_TYPE}"
+#          BUILD_TYPE="develop"
+#          if [[ ${BRANCH_NAME} == release/** ]]; then
+#            echo BUILD_TYPE="release"
+#          if [[ ${BRANCH_NAME} == hotpatch/** ]]; then
+#            echo BUILD_TYPE="patch"
+#          fi
+#          echo "${BUILD_TYPE}"
