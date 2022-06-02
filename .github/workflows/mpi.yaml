@@ -30,18 +30,32 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - name: Application Version
-        id: semrel
+      - id: changed-files
+        uses: jitterbit/get-changed-files@v1
+      - id: semrel
+        name: Application Version
         shell: bash
         run: |
           go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
           cd services/mpi/
           VERSION=$(semver get release)
+          if [[ $(semver get alpha) != *-alpha.0 ]]; then
+            VERSION=$(semver get alpha)
+          elif [[ $(semver get beta) != *-beta.0 ]]; then
+            VERSION=$(semver get beta)
+          elif [[ $(semver get rc) != *-rc.0 ]]; then
+            VERSION=$(semver get rc)
+          fi
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           SHORT_COMM=$(git rev-parse --short HEAD)
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
           if [[ ${BRANCH_NAME} == release/** ]]; then
-            IMAGE_TAG="${VERSION}"
+            IMAGE_TAG="${VERSION}-${SHORT_COMM}-release"
+            for changed_file in ${{ steps.changed-files.outputs.modified }}; do
+              if [[ ${changed_file} == services/mpi/.semver.yaml ]]; then
+                IMAGE_TAG="${VERSION}"
+              fi
+            done
           elif [[ ${BRANCH_NAME} == hotpatch/** ]]; then
             IMAGE_TAG="${VERSION}-${SHORT_COMM}-hotpatch"
           fi
