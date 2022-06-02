@@ -22,6 +22,7 @@ type Client struct {
 
 type FHIR interface {
 	ValidateResource(ctx context.Context, resName string, res fhirModel.AnyResource) (*fhirModel.OperationOutcome, error)
+
 	CreateBundle(ctx context.Context, b *fhirModel.Bundle) (*fhirModel.Bundle, error)
 	GetResourceByID(ctx context.Context, resName string, id fhirModel.ID, dst fhirModel.AnyResource) error
 	SearchResourceByParams(ctx context.Context, resName string, params []*client.QParam) (*fhirModel.Bundle, error)
