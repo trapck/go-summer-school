@@ -27,7 +27,8 @@ type ExtDocRegistryClient interface {
 }
 
 type UseCase struct {
-	fhir   FHIRClient
+	fhir FHIRClient
+
 	otp    OTPClient
 	docReg ExtDocRegistryClient
 }
