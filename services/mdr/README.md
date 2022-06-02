@@ -22,6 +22,4 @@
 | FHIR_SERVER_API_CONSUMER          | required      | FHIR API consumer                                                  |
 | FHIR_SERVER_API_REQUEST_TIMEOUT   | 30s           | FHIR API request timeout                                           |
 | OTP_SERVICE_HOST                  | required      | OTP service host                                                   |
-| OTP_SERVICE_HOST                  | required      | OTP service host                                                   |
-| OTP_SERVICE_HOST                  | required      | OTP service host                                                   |
 | OTP_SERVICE_REQUEST_TIMEOUT       | 30s           | OTP service request timeout                                        |
