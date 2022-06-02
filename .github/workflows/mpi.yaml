@@ -31,8 +31,7 @@ jobs:
           BUILD_TYPE="develop"
           if [[ ${BRANCH_NAME} == release/** ]]; then
             echo BUILD_TYPE="release"
-          if [[ ${BRANCH_NAME} == hotpatch/** ]]; then
+          elif [[ ${BRANCH_NAME} == hotpatch/** ]]; then
             echo BUILD_TYPE="patch"
-          else
           fi
-#          echo "${BUILD_TYPE}"
+          echo "${BUILD_TYPE}"
