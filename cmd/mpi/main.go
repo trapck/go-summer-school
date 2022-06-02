@@ -9,6 +9,5 @@ import (
 func main() {
 	if err := cmd.Run(); err != nil {
 		os.Exit(1)
-		os.Exit(1)
 	}
 }
