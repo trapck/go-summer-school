@@ -22,6 +22,12 @@ jobs:
         platform: [ ubuntu-latest ]
     runs-on: ubuntu-latest
     steps:
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+      - run: |
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            echo "Do something with this ${changed_file}."
+          done
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -32,7 +38,6 @@ jobs:
           fetch-depth: '0'
       - name: Application Version
         id: semrel
-        uses: jitterbit/get-changed-files@v1
         shell: bash
         run: |
           go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
