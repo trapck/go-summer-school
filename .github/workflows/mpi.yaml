@@ -26,12 +26,17 @@ jobs:
         id: semrel
         shell: bash
         run: |
+          VERSION="v0.1.0"
+          echo "${VERSION}"
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           echo "${BRANCH_NAME}"
-          BUILD_TYPE="develop"
+          SHORT_COMM=$(git rev-parse --short HEAD)
+          echo "${SHORT_COMM}"
+          echo "::set-output name=version::${{ github.ref == 'refs/heads/main' && '$VERSION-${SHORT_COMM}-develop' || '$VERSION' }}"
+          IMAGE_TAG="${VERSION}-${SHORT_COMM}"
           if [[ ${BRANCH_NAME} == release/** ]]; then
-            echo BUILD_TYPE="release"
+            IMAGE_TAG="${VERSION}"
           elif [[ ${BRANCH_NAME} == hotpatch/** ]]; then
-            echo BUILD_TYPE="patch"
+            IMAGE_TAG="${VERSION}-${SHORT_COMM}-hotpatch"
           fi
-          echo "${BUILD_TYPE}"
+          echo "${IMAGE_TAG}"
