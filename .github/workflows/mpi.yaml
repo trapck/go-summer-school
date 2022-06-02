@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
+      - id: changed-files
+        uses: jitterbit/get-changed-files@v1
       - id: semrel
         name: Application Version
         shell: bash
@@ -46,6 +48,6 @@ jobs:
             IMAGE_TAG="${VERSION}-${SHORT_COMM}-hotpatch"
           fi
           echo "${IMAGE_TAG}"
-          for changed_file in ${{ steps.files.outputs.all }}; do
+          for changed_file in ${{ steps.changed-files.outputs.all }}; do
             echo "Do something with this ${changed_file}."
           done
