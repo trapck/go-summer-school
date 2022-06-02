@@ -33,5 +33,6 @@ jobs:
             echo BUILD_TYPE="release"
           if [[ ${BRANCH_NAME} == hotpatch/** ]]; then
             echo BUILD_TYPE="patch"
+          else
           fi
 #          echo "${BUILD_TYPE}"
