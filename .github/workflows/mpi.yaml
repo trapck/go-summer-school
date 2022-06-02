@@ -5,10 +5,16 @@ on:
     branches:
       - master
       - release/**
+      - hotpatch/**
+#    paths:
+#    - "cmd/mpi/**.go"
+#    - "services/mpi/**.go"
+#    - "services/mpi/.semver.yaml"
+#    - ".github/workflows/mpi.yaml"
+#    - "configs/templates/dockerfile.tmpl"
 
 jobs:
   prepare:
-    if: "!contains(github.event.head_commit.message, 'Auto-release')"
     name: Preparing build context
     strategy:
       matrix:
@@ -20,11 +26,12 @@ jobs:
         id: semrel
         shell: bash
         run: |
-          echo "hello"
-          echo "${{ github.ref }}"
-          echo ${GITHUB_REF#refs/heads/}
-          if [[ ${{ github.ref }} == refs/heads/release/* ]]; then
-            echo "release"
-          else
-            echo "master"
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "${BRANCH_NAME}"
+          BUILD_TYPE="develop"
+          if [[ ${BRANCH_NAME} == release/** ]]; then
+            echo BUILD_TYPE="release"
+          if [[ ${BRANCH_NAME} == hotpatch/** ]]; then
+            echo BUILD_TYPE="patch"
           fi
+          echo "${BUILD_TYPE}"
