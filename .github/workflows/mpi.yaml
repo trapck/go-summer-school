@@ -49,7 +49,6 @@ jobs:
                 IMAGE_TAG="${VERSION}"
               fi
             done
-            IMAGE_TAG="${VERSION}"
           elif [[ ${BRANCH_NAME} == hotpatch/** ]]; then
             IMAGE_TAG="${VERSION}-${SHORT_COMM}-hotpatch"
           fi
