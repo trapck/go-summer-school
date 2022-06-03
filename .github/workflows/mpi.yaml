@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-      - release/**
-      - hotpatch/**
+      - release/*
+      - hotpatch/*
     paths:
     - "cmd/mpi/**.go"
     - "services/mpi/**.go"
