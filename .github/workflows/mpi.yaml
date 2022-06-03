@@ -57,12 +57,12 @@ jobs:
 
           if [[ ${BRANCH_NAME} == release/** ]]; then
             IMAGE_TAG="${IMAGE_TAG}-release"
-            if [[ ${IS_RELEASE} == "true" ]]; then
+            if [[ ${IS_RELEASE} == true ]]; then
               IMAGE_TAG="${VERSION}"
             fi
           elif [[ ${BRANCH_NAME} == hotpatch/** ]]; then
             IMAGE_TAG="${IMAGE_TAG}-hotpatch"
-            if [[ ${IS_RELEASE} == "true" ]]; then
+            if [[ ${IS_RELEASE} == true ]]; then
               IMAGE_TAG="${VERSION}"
             fi
           fi
