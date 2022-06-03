@@ -51,7 +51,7 @@ jobs:
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           IS_RELEASE="false"
-          if [[ ${COMMIT_MSG} == **\[release**\] ]]; then
+          if [[ ${COMMIT_MSG} == **\[release\]** ]]; then
             IS_RELEASE="true"
           fi
 
