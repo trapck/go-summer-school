@@ -50,8 +50,10 @@ jobs:
           SHORT_COMM=$(git rev-parse --short HEAD)
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
           COMMIT_MSG="${{ github.event.head_commit.message }}"
-          IS_RELEASE=[[ "${COMMIT_MSG}" == **\[release\]** ]]
-          
+          IS_RELEASE="false"
+          if [[ ${COMMIT_MSG} == **\[release\]** ]]; then
+            IS_RELEASE="true"
+          fi
 
           if [[ ${BRANCH_NAME} == release/** ]]; then
             IMAGE_TAG="${IMAGE_TAG}-release"
