@@ -6,6 +6,8 @@ on:
       - master
       - release/*
       - hotpatch/*
+    tags:
+      - mpi-v**
     paths:
     - "cmd/mpi/**.go"
     - "services/mpi/**.go"
