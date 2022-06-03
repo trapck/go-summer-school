@@ -39,8 +39,6 @@ jobs:
           go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
           cd services/mpi/
           
-          echo "${github.ref }"
-
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
             VERSION=$(semver get alpha)
