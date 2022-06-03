@@ -40,6 +40,7 @@ jobs:
           cd services/mpi/
           
           echo "${{ github.ref }}"
+          echo "${{ github.tag }}"
 
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
