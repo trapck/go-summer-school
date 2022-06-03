@@ -50,6 +50,7 @@ jobs:
           SHORT_COMM=$(git rev-parse --short HEAD)
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
           COMMIT_MSG="${{ github.event.head_commit.message }}"
+          echo "${COMMIT_MSG}"
           IS_RELEASE="${{ github.event.head_commit.message == '**[release]**' }}"
           echo "${IS_RELEASE}"
 
