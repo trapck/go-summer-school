@@ -36,6 +36,7 @@ jobs:
         run: |
           go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
           cd services/mpi/
+          
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
             VERSION=$(semver get alpha)
@@ -48,6 +49,8 @@ jobs:
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           SHORT_COMM=$(git rev-parse --short HEAD)
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
+          COMMIT_MSG="${{ github.event.head_commit.message == '**[release]**' }}"
+          echo "${COMMIT_MSG}"
           IS_RELEASE="false"
           if [[ ${{ github.event.head_commit.message == '**[release]**' }} ]]; then
             IS_RELEASE="true"
