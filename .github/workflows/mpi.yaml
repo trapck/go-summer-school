@@ -47,7 +47,7 @@ jobs:
           
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           SHORT_COMM=$(git rev-parse --short HEAD)
-          IS_RELEASE=${{ github.event.head_commit.message == '**[release]**' && 'true' || 'false' }}
+          IS_RELEASE="${{ github.event.head_commit.message == '**[release]**' && 'true' || 'false' }}"
           echo "${IS_RELEASE}"
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
 
