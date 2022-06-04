@@ -11,7 +11,7 @@ on:
     paths:
     - "cmd/mpi/**.go"
     - "services/mpi/**.go"
-    - "services/mpi/.semver.yaml"
+#    - "services/mpi/.semver.yaml"
     - ".github/workflows/mpi.yaml"
     - "configs/templates/dockerfile.tmpl"
 
@@ -40,7 +40,7 @@ jobs:
           cd services/mpi/
           
           echo "${{ github.ref }}"
-          echo "${{ github.tag }}"
+          echo "${{toJSON(github.event)}}"
 
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
