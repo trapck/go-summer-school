@@ -39,10 +39,8 @@ jobs:
           go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
           cd services/mpi/
           
-          echo "${{ github.ref }}"
           echo "${{ github.ref_type }}"
           echo "${{ github.ref_name }}"
-          echo "${{toJSON(github)}}"
 
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
@@ -53,24 +51,18 @@ jobs:
             VERSION=$(semver get rc)
           fi
           
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          REF_NAME="${{ github.ref_name }}"
+          REF_TYPE="${{ github.ref_type }}"
           SHORT_COMM=$(git rev-parse --short HEAD)
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
-          IS_RELEASE="false"
-          if [[ ${COMMIT_MSG} == **\[release\]** ]]; then
-            IS_RELEASE="true"
-          fi
 
-          if [[ ${BRANCH_NAME} == release/** ]]; then
-            IMAGE_TAG="${IMAGE_TAG}-release"
-            if [[ ${IS_RELEASE} == true ]]; then
-              IMAGE_TAG="${VERSION}"
-            fi
-          elif [[ ${BRANCH_NAME} == hotpatch/** ]]; then
-            IMAGE_TAG="${IMAGE_TAG}-hotpatch"
-            if [[ ${IS_RELEASE} == true ]]; then
-              IMAGE_TAG="${VERSION}"
+          if [[ ${REF_TYPE} == tag ]]; then
+            IMAGE_TAG="${VERSION}"
+          else
+            if [[ ${REF_NAME} == release/** ]]; then
+              IMAGE_TAG="${IMAGE_TAG}-release"
+            elif [[ ${REF_NAME} == hotpatch/** ]]; then
+              IMAGE_TAG="${IMAGE_TAG}-hotpatch"
             fi
           fi
           
