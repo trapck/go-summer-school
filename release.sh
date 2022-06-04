@@ -21,7 +21,10 @@ esac
 done
 set -- "${POSITIONAL[@]}"
 
-echo "$RELEASE_NAME ; $RELEASE_HEAD"
+if [[ $SERVICE_NAME == "" ]]; then
+    echo "empty service name"
+    exit 1
+fi
 
 BRANCH_NAME="release/$RELEASE_NAME"
 

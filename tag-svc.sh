@@ -16,6 +16,11 @@ esac
 done
 set -- "${POSITIONAL[@]}"
 
+if [[ $SERVICE_NAME == "" ]]; then
+    echo "empty service name"
+    exit 1
+fi
+
 SERVICE_PATH="./services/$SERVICE_NAME"
 
 cd "services/$SERVICE_NAME"
