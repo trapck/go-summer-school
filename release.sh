@@ -21,8 +21,8 @@ esac
 done
 set -- "${POSITIONAL[@]}"
 
-if [[ $SERVICE_NAME == "" ]]; then
-    echo "empty service name"
+if [[ $RELEASE_NAME == "" ]]; then
+    echo "empty release name"
     exit 1
 fi
 
