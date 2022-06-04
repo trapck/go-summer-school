@@ -38,6 +38,7 @@ func New(fc FHIRClient, oc OTPClient, edrc ExtDocRegistryClient) *UseCase {
 	// feat 1
 	// feat 2
 
+	// feat release
 	// feat 3
 	return &UseCase{fhir: fc, otp: oc, docReg: edrc}
 }
