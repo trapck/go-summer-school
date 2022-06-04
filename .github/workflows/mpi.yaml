@@ -40,6 +40,8 @@ jobs:
           cd services/mpi/
           
           echo "${{ github.ref }}"
+          echo "${{ github.ref_type }}"
+          echo "${{ github.ref_name }}"
           echo "${{toJSON(github)}}"
 
           VERSION=$(semver get release)
