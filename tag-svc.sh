@@ -1,6 +1,8 @@
 #!/bin/bash
 # required go install github.com/maykonlf/semver-cli/cmd/semver@v1.1.0
-# example: sh scripts/tag-svc.sh --service myservice
+# example: sh scripts/tag-svc.sh --service myservice [--skip-push]
+
+IS_SKIP_PUSH=false
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -11,6 +13,11 @@ do
             SERVICE_NAME="$2"
             shift # past argument
             shift # past value
+            ;;
+        --skip-push)
+            IS_SKIP_PUSH=true
+            shift
+            shift
             ;;
     esac
 done
@@ -38,9 +45,9 @@ fi
 GIT_TAG="$SERVICE_NAME-$VERSION"
 
 git tag -a $GIT_TAG -m "$SERVICE_NAME svc tag $GIT_TAG"
+echo "\n===> created tag $GIT_TAG in local reposiotry\n"
 
-echo "===> created tag $GIT_TAG in local reposiotry\n"
-
-git push origin $GIT_TAG
-
-echo "\n===> pushed tag $GIT_TAG to remote repository"
+if [[ $IS_SKIP_PUSH == false ]]; then
+    git push origin $GIT_TAG
+    echo "\n===> pushed tag $GIT_TAG to the remote repository"
+fi

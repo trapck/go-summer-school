@@ -1,7 +1,8 @@
 #!/bin/bash
-# example: sh scripts/release.sh --name 040620 --head svc-v0.15.0
+# example: sh scripts/release.sh --name 040620 [--head svc-v0.15.0] [--patch] [--skip-push]
 
 IS_HOTPATCH=false
+IS_SKIP_PUSH=false
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -15,13 +16,18 @@ do
         ;;
       -h | --head)
         RELEASE_HEAD="$2"
-        shift # past argument
-        shift # past value
+        shift
+        shift
         ;;
       -p | --patch)
         IS_HOTPATCH=true
-        shift # past argument
-        shift # past value
+        shift
+        shift
+        ;;
+      --skip-push)
+        IS_SKIP_PUSH=true
+        shift
+        shift
         ;;
   esac
 done
@@ -52,6 +58,9 @@ if [[ $IS_HOTPATCH == true ]]; then
 fi
 
 git checkout $RELEASE_HEAD -b $BRANCH_NAME
-git push -u origin $BRANCH_NAME
+echo "\n===> created and switched to $BRANCH_NAME\n"
 
-echo "\n===> created and pushed release branch $BRANCH_NAME"
+if [[ $IS_SKIP_PUSH == false ]]; then
+  git push -u origin $BRANCH_NAME
+  echo "\n===> pushed $BRANCH_NAME to the remote repository"
+fi
