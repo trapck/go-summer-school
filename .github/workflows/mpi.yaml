@@ -55,7 +55,8 @@ jobs:
 
           if [[ ${REF_TYPE} == tag ]]; then
             if [[ ${REF_NAME} != "mpi-${VERSION}" ]]; then
-              echo "!!! version is different !!!"
+              echo "git tag name should be equal to service version (mpi-${VERSION})"
+              exit 1
             fi
             IMAGE_TAG="${VERSION}"
           else
