@@ -28,4 +28,8 @@ fi
 
 BRANCH_NAME="release/$RELEASE_NAME"
 
+if [[ $RELEASE_HEAD != "" ]]; then
+    git fetch --tags
+fi
+
 git checkout $RELEASE_HEAD -b $BRANCH_NAME
