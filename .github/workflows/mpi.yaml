@@ -36,7 +36,7 @@ jobs:
         name: Application Version
         shell: bash
         run: |
-          go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
+          go install github.com/maykonlf/semver-cli/cmd/semver@v1.1.0
           cd services/mpi/
           
           VERSION=$(semver get release)

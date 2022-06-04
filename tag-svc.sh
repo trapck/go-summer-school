@@ -10,7 +10,6 @@ key="$1"
 case $key in
     --service)
     SERVICE_NAME="$2"
-    shift # past argument
     shift # past value
     ;;
 esac

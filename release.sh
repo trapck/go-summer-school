@@ -1,5 +1,4 @@
 #!/bin/bash
-# required go install github.com/maykonlf/semver-cli/cmd/semver@v1.1.0
 # example: sh scripts/release.sh --name 040620 --head svc-v0.15.0
 
 POSITIONAL=()
