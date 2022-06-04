@@ -35,5 +35,6 @@ type UseCase struct {
 }
 
 func New(fc FHIRClient, oc OTPClient, edrc ExtDocRegistryClient) *UseCase {
+	// feat 1
 	return &UseCase{fhir: fc, otp: oc, docReg: edrc}
 }
