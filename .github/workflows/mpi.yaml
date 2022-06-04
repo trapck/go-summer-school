@@ -40,7 +40,7 @@ jobs:
           cd services/mpi/
           
           echo "${{ github.ref }}"
-          echo "${{toJSON(github.event)}}"
+          echo "${{toJSON(github)}}"
 
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
