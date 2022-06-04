@@ -5,15 +5,14 @@
 POSITIONAL=()
 while [[ $# -gt 0 ]]
 do
-key="$1"
-
-case $key in
-    --service)
-    SERVICE_NAME="$2"
-    shift # past argument
-    shift # past value
-    ;;
-esac
+    key="$1"
+    case $key in
+        -s | --service)
+            SERVICE_NAME="$2"
+            shift # past argument
+            shift # past value
+            ;;
+    esac
 done
 set -- "${POSITIONAL[@]}"
 
