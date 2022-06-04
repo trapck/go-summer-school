@@ -38,10 +38,10 @@ fi
 
 GIT_TAG="$SERVICE_NAME-$VERSION"
 
-#git tag -a $GIT_TAG -m "$SERVICE_NAME svc tag $GIT_TAG"
+git tag -a $GIT_TAG -m "$SERVICE_NAME svc tag $GIT_TAG"
 
 echo "===> created tag $GIT_TAG in local reposiotry\n"
 
-#git push origin $GIT_TAG
+git push origin $GIT_TAG
 
 echo "\n===> pushed tag $GIT_TAG to remote repository"
