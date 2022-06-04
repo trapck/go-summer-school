@@ -26,10 +26,13 @@ if [[ $RELEASE_NAME == "" ]]; then
     exit 1
 fi
 
-BRANCH_NAME="release/$RELEASE_NAME"
-
 if [[ $RELEASE_HEAD != "" ]]; then
     git fetch --tags
 fi
 
+BRANCH_NAME="release/$RELEASE_NAME"
+
 git checkout $RELEASE_HEAD -b $BRANCH_NAME
+git push -u origin $BRANCH_NAME
+
+echo "\n===> created and pushed release branch $BRANCH_NAME"
