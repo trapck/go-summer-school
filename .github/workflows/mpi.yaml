@@ -39,9 +39,6 @@ jobs:
           go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
           cd services/mpi/
           
-          echo "${{ github.ref_type }}"
-          echo "${{ github.ref_name }}"
-
           VERSION=$(semver get release)
           if [[ $(semver get alpha) != *-alpha.0 ]]; then
             VERSION=$(semver get alpha)
@@ -57,6 +54,9 @@ jobs:
           IMAGE_TAG="${VERSION}-${SHORT_COMM}"
 
           if [[ ${REF_TYPE} == tag ]]; then
+            if [[ ${REF_NAME} != "mpi-${VERSION}" ]]; then
+              echo "!!! version is different !!!"
+            fi
             IMAGE_TAG="${VERSION}"
           else
             if [[ ${REF_NAME} == release/** ]]; then
