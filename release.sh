@@ -1,5 +1,5 @@
 #!/bin/bash
-# example: sh scripts/release.sh --name 040620 [--head svc-v0.15.0] [--patch] [--skip-push]
+# example: sh scripts/release.sh --name 040620 [--head svc-v0.15.0] [--patch] [--skip-push] [--patch [-- --skip-push]] [--skip-push [-- --patch]]
 
 IS_HOTPATCH=false
 IS_SKIP_PUSH=false
