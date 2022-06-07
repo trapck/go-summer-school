@@ -1,0 +1,123 @@
+name: "mpi"
+
+on:
+  push:
+    branches:
+      - main
+      - release/*
+      - hotpatch/*
+    tags:
+      - mpi-v*
+    paths:
+    - "cmd/mpi/**.go"
+    - "services/mpi/**.go"
+    - ".github/workflows/mpi.yaml"
+    - "configs/templates/dockerfile.tmpl"
+
+env:
+  # AWS
+  CORE_AWS_REGION: eu-north-1
+  CORE_AWS_ACCESS_KEY_ID: ${{ secrets.CORE_AWS_ACCESS_KEY_ID }}
+  CORE_AWS_SECRET_ACCESS_KEY: ${{ secrets.CORE_AWS_SECRET_ACCESS_KEY }}
+  CORE_AWS_ACCOUNT_ID: ${{ secrets.CORE_AWS_ACCOUNT_ID }}
+  GH_TOKEN_REPO_FULL_ACCESS: ${{ secrets.GH_TOKEN_REPO_FULL_ACCESS }}
+
+jobs:
+  prepare:
+    if: "!contains(github.event.head_commit.message, 'Auto-release')"
+    name: Preparing build context
+    strategy:
+      matrix:
+        go-version: [ 1.18.x ]
+        platform: [ ubuntu-latest ]
+    runs-on: ubuntu-latest
+    outputs:
+      RELEASE_VERSION: ${{ steps.semrel.outputs.version }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Application Version
+        id: semrel
+        shell: bash
+        run: |
+          go install github.com/maykonlf/semver-cli/cmd/semver@v1.0.2
+          cd services/mpi/
+          VERSION=$(semver get release)
+          SHORT_COMM=$(git rev-parse --short HEAD)
+          echo "::set-output name=version::${{ github.ref == 'refs/heads/main' && '$VERSION-${SHORT_COMM}-develop' || '$VERSION' }}"
+      - name: Semver check
+        run: |
+          echo "[data] Semantic version detected: ${{ steps.semrel.outputs.version }}"
+  build-push:
+    if: "!contains(github.event.head_commit.message, 'Auto-release')"
+    name: Build and push
+    needs: [ prepare ]
+    strategy:
+      matrix:
+        go-version: [ 1.18.x ]
+        platform: [ ubuntu-latest ]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.CORE_AWS_REGION }}
+          aws-access-key-id: ${{ secrets.CORE_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CORE_AWS_SECRET_ACCESS_KEY }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image
+        id: build-image
+        if: ${{ needs.prepare.outputs.RELEASE_VERSION }} != ''
+        shell: bash
+        run: |
+          TAG=${{ needs.prepare.outputs.RELEASE_VERSION }}
+          ECR_REGISTRY_URL="${{ secrets.CORE_AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.CORE_AWS_REGION }}.amazonaws.com"
+          SRV="mpi"
+          IMAGE_NAME="core.wasfaty.mpi"
+          IMAGE_FULL_NAME="${ECR_REGISTRY_URL}/${IMAGE_NAME}:$TAG"
+          echo "::set-output name=registry_path::${ECR_REGISTRY_URL}/${IMAGE_NAME}"
+          
+          BLDVER=$(make bldver)
+          chmod +x ./scripts/gen-docker.sh
+          
+          SRV_TEMPLATE="-"
+          if [ "$SRV" == "notification" ]
+          then
+            SRV_TEMPLATE="configs/templates/dockerfile-wkhtmltopdf.tmpl"
+          fi
+          
+          ./scripts/gen-docker.sh -s mpi -t $SRV_TEMPLATE
+      
+          docker build -f dockerfile.mpi --rm -t $IMAGE_FULL_NAME --build-arg version="module:mpi,$BLDVER" .
+          docker push $IMAGE_FULL_NAME
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
+#      - name: Trigger deploy workflow
+#        env:
+#          GITHUB_TOKEN: ${{ env.GH_TOKEN_REPO_FULL_ACCESS }}
+#        run: |
+#          gh workflow run release-update.yaml \
+#            --repo edenlabllc/brooklyn.bootstrap.infra --ref ${{ github.ref == 'refs/heads/main' && 'develop' || 'staging' }} \
+#            -f "repository_full_name=${{ steps.build-image.outputs.registry_path }}" \
+#            -f "version=${{ needs.prepare.outputs.RELEASE_VERSION }}"

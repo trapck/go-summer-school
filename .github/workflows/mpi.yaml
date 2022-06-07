@@ -6,14 +6,14 @@ on:
       - master
       - release/*
       - hotpatch/*
-    tags:
-      - mpi-v*
     paths:
     - "cmd/mpi/**.go"
     - "services/mpi/**.go"
 #    - "services/mpi/.semver.yaml"
     - ".github/workflows/mpi.yaml"
     - "configs/templates/dockerfile.tmpl"
+    tags:
+      - mpi-v*
 
 jobs:
   prepare:
