@@ -18,6 +18,7 @@ type SearchTaskByTelecomParams struct {
 	BirthDate string
 	// new feature 1
 	// new feature 2
+	// new bug bix 22
 	// new feature 3
 	// new feature 4
 }
