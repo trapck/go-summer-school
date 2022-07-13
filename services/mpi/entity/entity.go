@@ -16,7 +16,8 @@ type SearchTaskByTelecomParams struct {
 	Use       string
 	System    string
 	BirthDate string
-	// new feature
+	// new feature 1
+	// new feature 2
 }
 
 type SearchTaskByIdentifierParams struct {
