@@ -19,9 +19,13 @@ type SearchTaskByTelecomParams struct {
 	// new feature 1
 	// new feature 2
 	// new bug bix 22
+<<<<<<< HEAD
 	// new feature 3
 	// new feature 4
 	// new feature 5
+=======
+	// new gub fix 33
+>>>>>>> hotpatch/mpi-v0.57.0-mpi-v0570
 }
 
 type SearchTaskByIdentifierParams struct {
