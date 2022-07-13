@@ -21,6 +21,7 @@ type SearchTaskByTelecomParams struct {
 	// new bug bix 22
 	// new feature 3
 	// new feature 4
+	// new feature 5
 }
 
 type SearchTaskByIdentifierParams struct {
