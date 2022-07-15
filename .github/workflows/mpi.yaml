@@ -88,7 +88,7 @@ jobs:
 #          echo "${IMAGE_TAG}"
       - name: Trigger deploy workflow
 #        if: "!contains(github.event.head_commit.message, '[no deploy]') && github.ref_name == 'main'"
-        if: ${{ needs.prepare.outputs.RELEASE_VERSION }} != ''
+        if: needs.prepare.outputs.RELEASE_VERSION != ''
         run: |
           echo "deploying ..."
           echo "${{ toJson(github) }}"
