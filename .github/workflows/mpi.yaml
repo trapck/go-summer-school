@@ -9,6 +9,7 @@ on:
     paths:
     - "cmd/mpi/**.go"
     - "services/mpi/**.go"
+    - "**_test.go"
 #    - "services/mpi/.semver.yaml"
     - ".github/workflows/mpi.yaml"
     - "configs/templates/dockerfile.tmpl"
