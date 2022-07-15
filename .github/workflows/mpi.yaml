@@ -43,20 +43,16 @@ jobs:
     steps:
       - name: Build, tag, and push image
         id: build-image
-        if: needs.prepare.outputs.RELEASE_VERSION != ''
         shell: bash
         run: |
           TAG=${{ needs.prepare.outputs.RELEASE_VERSION }}
           if [[ ${TAG} == '' ]]; then
-            echo "!!! image tag from the previous step is empty"
+            echo "!!! needs.prepare.outputs.RELEASE_VERSION is empty"
             exit 1
           fi
       - name: Trigger deploy workflow
-        if: "!contains(github.event.head_commit.message, '[no deploy]') && github.ref_name == 'main'"
+        if: "!contains(github.event.head_commit.message, '[no deploy]') && github.ref_name == 'master'"
         env:
           GITHUB_TOKEN: ${{ env.GH_TOKEN_REPO_FULL_ACCESS }}
         run: |
-          gh workflow run release-update.yaml \
-            --repo edenlabllc/ksa-ehealth.bootstrap.infra --ref develop \
-            -f "repository_full_name=${{ steps.build-image.outputs.registry_path }}" \
-            -f "version=${{ needs.prepare.outputs.RELEASE_VERSION }}"
+          echo "deploying ..."
