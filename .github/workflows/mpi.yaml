@@ -17,82 +17,55 @@ on:
 
 jobs:
   prepare:
-    name: Preparing build context
+    name: Prepare
     strategy:
       matrix:
         go-version: [ 1.18.x ]
         platform: [ ubuntu-latest ]
     runs-on: ubuntu-latest
-    outputs:
-      RELEASE_VERSION: ${{ steps.semrel.outputs.version }}
     steps:
-      - name: Application Version
-        id: semrel
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - id: semrel
+        name: Application Version
         shell: bash
         run: |
-          IMAGE_TAG=v1
-          echo "::set-output name=version::${IMAGE_TAG}"
-  build:
-    name: Build
-    needs: [ prepare ]
-    strategy:
-      matrix:
-        go-version: [ 1.18.x ]
-        platform: [ ubuntu-latest ]
-    runs-on: ubuntu-latest
-    steps:
-#      - name: Install Go
-#        uses: actions/setup-go@v2
-#        with:
-#          go-version: ${{ matrix.go-version }}
-#      - name: Checkout repo
-#        uses: actions/checkout@v2
-#        with:
-#          fetch-depth: '0'
-#      - id: semrel
-#        name: Application Version
-#        shell: bash
-#        run: |
-#          go install github.com/maykonlf/semver-cli/cmd/semver@v1.1.0
-#          cd services/mpi/
-#          
-#          VERSION=$(semver get release)
-#          
-#          if [[ $(semver get alpha) != *-alpha.0 ]]; then
-#            VERSION=$(semver get alpha)
-#          elif [[ $(semver get beta) != *-beta.0 ]]; then
-#            VERSION=$(semver get beta)
-#          elif [[ $(semver get rc) != *-rc.0 ]]; then
-#            VERSION=$(semver get rc)
-#          fi
-#
-#          SHORT_COMM=$(git rev-parse --short HEAD)
-#          IMAGE_TAG="${VERSION}-${SHORT_COMM}"
-#          REF_NAME="${{ github.ref_name }}"
-#          REF_TYPE="${{ github.ref_type }}"
-#
-#          if [[ ${REF_TYPE} == tag ]]; then
-#            if [[ ${REF_NAME} != "mpi-${VERSION}" ]]; then
-#              echo "!!! git tag name (${REF_NAME}) is not equal to service version (mpi-${VERSION})"
-#              exit 1
-#            fi
-#            IMAGE_TAG="${VERSION}"
-#          else
-#            if [[ ${REF_NAME} == release/* ]]; then
-#              IMAGE_TAG="${IMAGE_TAG}-release"
-#            elif [[ ${REF_NAME} == hotpatch/* ]]; then
-#              IMAGE_TAG="${IMAGE_TAG}-hotpatch"
-#            fi
-#          fi
-#          
-#          echo "${IMAGE_TAG}"
-      - name: Trigger deploy workflow
-#        if: "!contains(github.event.head_commit.message, '[no deploy]') && github.ref_name == 'main'"
-        if: needs.prepare.outputs.RELEASE_VERSION != ''
-        run: |
-          echo "deploying ..."
-          echo "${{ toJson(github) }}"
-# gh workflow run release-update.yaml \
-#   --repo edenlabllc/ksa-ehealth.bootstrap.infra --ref develop \
-#   -f "repository_full_name=288509344804.dkr.ecr.eu-north-1.amazonaws.com/core.wasfaty.mpi" \
-#   -f "version=v0.1.0"
+          go install github.com/maykonlf/semver-cli/cmd/semver@v1.1.0
+          cd services/mpi/
+          
+          VERSION=$(semver get release)
+          
+          if [[ $(semver get alpha) != *-alpha.0 ]]; then
+            VERSION=$(semver get alpha)
+          elif [[ $(semver get beta) != *-beta.0 ]]; then
+            VERSION=$(semver get beta)
+          elif [[ $(semver get rc) != *-rc.0 ]]; then
+            VERSION=$(semver get rc)
+          fi
+
+          SHORT_COMM=$(git rev-parse --short HEAD)
+          IMAGE_TAG="${VERSION}-${SHORT_COMM}"
+          REF_NAME="${{ github.ref_name }}"
+          REF_TYPE="${{ github.ref_type }}"
+
+          if [[ ${REF_TYPE} == tag ]]; then
+            if [[ ${REF_NAME} != "mpi-${VERSION}" ]]; then
+              echo "!!! git tag name (${REF_NAME}) is not equal to service version (mpi-${VERSION})"
+              exit 1
+            fi
+            IMAGE_TAG="${VERSION}"
+          else
+            if [[ ${REF_NAME} == release/* ]]; then
+              IMAGE_TAG="${IMAGE_TAG}-release"
+            elif [[ ${REF_NAME} == hotpatch/* ]]; then
+              IMAGE_TAG="${IMAGE_TAG}-hotpatch"
+            fi
+          fi
+          
+          echo "${IMAGE_TAG}"
