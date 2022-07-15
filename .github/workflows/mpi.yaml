@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           IMAGE_TAG=v1
-#          echo "::set-output name=version::${IMAGE_TAG}"
+          echo "::set-output name=version::${IMAGE_TAG}"
   build-push:
     name: Build and push
     needs: [ prepare ]
