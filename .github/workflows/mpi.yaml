@@ -70,7 +70,7 @@ jobs:
 #          
 #          echo "${IMAGE_TAG}"
       - name: Trigger deploy workflow
-        if: ${{ github.ref_name }} == master
+        if: ${{ github.ref_name }} == release
         run: |
           echo "deploying ..."
 
