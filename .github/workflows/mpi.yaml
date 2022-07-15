@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           IMAGE_TAG=v1
-          echo "::set-output name=version::${IMAGE_TAG}"
+#          echo "::set-output name=version::${IMAGE_TAG}"
   build:
     name: Build
     needs: [ prepare ]
@@ -88,11 +88,10 @@ jobs:
 #          echo "${IMAGE_TAG}"
       - name: Trigger deploy workflow
 #        if: "!contains(github.event.head_commit.message, '[no deploy]') && github.ref_name == 'main'"
-        if: needs.prepare.outputs.RELEASE_VERSION != ''
+        if: ${{ needs.prepare.outputs.RELEASE_VERSION }} != ''
         run: |
           echo "deploying ..."
           echo "${{ toJson(github) }}"
-
 # gh workflow run release-update.yaml \
 #   --repo edenlabllc/ksa-ehealth.bootstrap.infra --ref develop \
 #   -f "repository_full_name=288509344804.dkr.ecr.eu-north-1.amazonaws.com/core.wasfaty.mpi" \
