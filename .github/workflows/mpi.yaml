@@ -75,6 +75,7 @@ jobs:
 #        if: "contains(github.ref_name, 'release')"
 #        if: ${{ github.ref_name }} == 'release'
         run: |
+          echo "deploying ..."
           echo "${{ toJson(github) }}"
 
 # gh workflow run release-update.yaml \
