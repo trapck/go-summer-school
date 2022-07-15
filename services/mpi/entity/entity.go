@@ -23,6 +23,7 @@ type SearchTaskByTelecomParams struct {
 	// new gub fix 33
 	// new feature 4
 	// new feature 5
+	// new feature 6
 }
 
 type SearchTaskByIdentifierParams struct {
