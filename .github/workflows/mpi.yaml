@@ -73,7 +73,7 @@ jobs:
         if: "!contains(github.event.head_commit.message, '[no deploy]')"
 #        if: ${{ github.ref_name }} == 'release'
         run: |
-          echo "deploying ..."
+          echo "${{ toJson(github) }}"
 
 # gh workflow run release-update.yaml \
 #   --repo edenlabllc/ksa-ehealth.bootstrap.infra --ref develop \
