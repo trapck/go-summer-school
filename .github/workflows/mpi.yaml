@@ -57,3 +57,4 @@ jobs:
           GITHUB_TOKEN: ${{ env.GH_TOKEN_REPO_FULL_ACCESS }}
         run: |
           echo "deploying ..."
+          echo $(gh --version)
