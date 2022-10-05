@@ -25,6 +25,7 @@ type SearchTaskByTelecomParams struct {
 	// new feature 5
 	// new feature 6
 	// new feature 7
+	// new feature 8
 }
 
 type SearchTaskByIdentifierParams struct {
