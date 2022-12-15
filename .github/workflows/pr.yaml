@@ -1,0 +1,15 @@
+name: "Danger JS"
+
+on: [pull_request]
+
+jobs:
+  build:
+    name: Danger JS
+    runs-on: ubuntu-latest
+    outputs:
+      RELEASE_VERSION: ${{ steps.semrel.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run danger
+        uses: danger/danger-js@11.2.0
